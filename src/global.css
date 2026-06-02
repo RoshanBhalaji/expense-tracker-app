@@ -1,9 +1,213 @@
-:root {
-  --font-display:
-    Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-    Segoe UI Symbol, Noto Color Emoji;
-  --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-  --font-rounded: 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif;
-  --font-serif: Georgia, 'Times New Roman', serif;
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL STYLESHEET
+   Stack: Expo · React Native · NativeWind v4 · Tailwind CSS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* ── 1. DESIGN TOKENS (CSS Custom Properties) ───────────────────────────── */
+/*
+   Single source of truth for the visual language.
+   All values match src/design/tokens.ts — update both together.
+   Dark-mode values are overridden in the .dark block below.
+*/
+
+@layer base {
+
+  :root {
+    /* ── Backgrounds ── */
+    --bg-primary:    #FFFFFF;
+    --bg-secondary:  #F7F7F7;
+    --bg-card:       #FFFFFF;
+    --bg-input:      #F3F4F6;
+
+    /* ── Accent ── */
+    --accent:        #111111;
+    --accent-dim:    rgba(17, 17, 17, 0.063);
+    --accent-glow:   rgba(17, 17, 17, 0.094);
+
+    /* ── Text ── */
+    --text-primary:   #111111;
+    --text-secondary: #6B7280;
+    --text-muted:     #9CA3AF;
+    --text-inverse:   #FFFFFF;
+
+    /* ── Semantic states ── */
+    --color-success: #10B981;
+    --color-error:   #EF4444;
+    --color-warning: #F59E0B;
+
+    /* ── Borders ── */
+    --border:         #E5E7EB;
+    --border-accent:  #D1D5DB;
+
+    /* ── Typography ── */
+    --font-heading:  "Outfit_700Bold",  system-ui, sans-serif;
+    --font-body:     "Outfit_400Regular", system-ui, sans-serif;
+    --font-medium:   "Outfit_500Medium",  system-ui, sans-serif;
+    --font-semibold: "Outfit_600SemiBold", system-ui, sans-serif;
+
+    /* ── Type scale ── */
+    --text-xs:   12px;
+    --text-sm:   14px;
+    --text-base: 16px;
+    --text-lg:   18px;
+    --text-xl:   20px;
+    --text-2xl:  24px;
+    --text-3xl:  30px;
+    --text-4xl:  36px;
+
+    /* ── Spacing scale (4-pt grid) ── */
+    --space-1:   4px;
+    --space-2:   8px;
+    --space-3:  12px;
+    --space-4:  16px;
+    --space-5:  20px;
+    --space-6:  24px;
+    --space-8:  32px;
+    --space-10: 40px;
+    --space-12: 48px;
+
+    /* ── Border radius ── */
+    --radius-sm:   8px;
+    --radius-md:  12px;
+    --radius-lg:  16px;
+    --radius-xl:  20px;
+    --radius-full: 9999px;
+
+    /* ── Elevation / Shadow ── */
+    --shadow-card:   0 2px  8px rgba(0, 0, 0, 0.06);
+    --shadow-accent: 0 4px 16px rgba(0, 0, 0, 0.10);
+    --shadow-tab:    0 8px 24px rgba(0, 0, 0, 0.18);
+
+    /* ── Motion ── */
+    --duration-fast:   150ms;
+    --duration-normal: 250ms;
+    --duration-slow:   400ms;
+    --ease-out:  cubic-bezier(0.0, 0.0, 0.2, 1);
+    --ease-in:   cubic-bezier(0.4, 0.0, 1.0, 1);
+    --ease-inout:cubic-bezier(0.4, 0.0, 0.2, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+
+  /* ── 2. DARK MODE OVERRIDES ───────────────────────────────────────────── */
+  /*
+     Applied when ThemeContext sets isDark=true and adds className="dark"
+     to the root View. All --var overrides cascade to every child.
+  */
+
+  .dark {
+    --bg-primary:    #0A0F1E;
+    --bg-secondary:  #111827;
+    --bg-card:       #1C2333;
+    --bg-input:      #161D2F;
+
+    --accent:        #FFFFFF;
+    --accent-dim:    rgba(255, 255, 255, 0.071);
+    --accent-glow:   rgba(255, 255, 255, 0.125);
+
+    --text-primary:   #F9FAFB;
+    --text-secondary: #9CA3AF;
+    --text-muted:     #4B5563;
+    --text-inverse:   #111111;
+
+    --border:        #1F2937;
+    --border-accent: rgba(255, 255, 255, 0.145);
+
+    --shadow-card:   0 2px  8px rgba(0, 0, 0, 0.40);
+    --shadow-accent: 0 6px 16px rgba(0, 0, 0, 0.50);
+    --shadow-tab:    0 8px 24px rgba(0, 0, 0, 0.50);
+  }
+
+}
+
+
+/* ── 3. KEYFRAME ANIMATIONS ─────────────────────────────────────────────── */
+
+@layer utilities {
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px);  }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+
+  @keyframes slide-down {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0);     }
+  }
+
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1);    }
+  }
+
+  @keyframes pulse-subtle {
+    0%, 100% { opacity: 1;    }
+    50%       { opacity: 0.55; }
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+
+  /* ── 4. ANIMATION UTILITY CLASSES ──────────────────────────────────────── */
+
+  .animate-fade-in {
+    animation: fade-in var(--duration-normal) var(--ease-out) both;
+  }
+
+  .animate-slide-up {
+    animation: slide-up var(--duration-slow) var(--ease-spring) both;
+  }
+
+  .animate-slide-down {
+    animation: slide-down var(--duration-normal) var(--ease-out) both;
+  }
+
+  .animate-scale-in {
+    animation: scale-in var(--duration-normal) var(--ease-spring) both;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 2s var(--ease-inout) infinite;
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  /* Skeleton loader */
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent            25%,
+      rgba(255,255,255,0.07) 50%,
+      transparent            75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s var(--ease-inout) infinite;
+  }
+
+  /* Stagger helpers — add delay to nth children */
+  .stagger-1 { animation-delay:  50ms; }
+  .stagger-2 { animation-delay: 100ms; }
+  .stagger-3 { animation-delay: 150ms; }
+  .stagger-4 { animation-delay: 200ms; }
+  .stagger-5 { animation-delay: 250ms; }
+
 }

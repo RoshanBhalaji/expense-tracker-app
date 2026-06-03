@@ -6,16 +6,16 @@ import {
   Outfit_700Bold,
 } from "@expo-google-fonts/outfit";
 import { useFonts } from "expo-font";
+import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { SplashScreen, Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { View } from "react-native";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import { ThemeProvider, useTheme } from "../context/ThemeContext";
+import { gluestackConfig } from "../gluestack.config";
 
 SplashScreen.preventAutoHideAsync();
 
-// Hides the splash only after BOTH fonts AND the token check are done,
-// preventing any flash of the login screen for returning users.
 function AuthGate({ children }: { children: React.ReactNode }) {
   const { isLoading } = useAuth();
   useEffect(() => {
@@ -33,17 +33,16 @@ function RootLayoutNav() {
   useEffect(() => {
     if (isLoading) return;
     const inAuthGroup = segments[0] === "(auth)";
-    if (!isAuthenticated && !inAuthGroup) {
-      router.replace("/(auth)/login");
-    } else if (isAuthenticated && inAuthGroup) {
-      router.replace("/(app)");
-    }
+    if (!isAuthenticated && !inAuthGroup) router.replace("/(auth)/login");
+    else if (isAuthenticated && inAuthGroup) router.replace("/(app)");
   }, [isAuthenticated, isLoading, segments]);
 
   return (
-    <View className={`flex-1 ${isDark ? "dark" : ""}`}>
-      <Stack screenOptions={{ headerShown: false }} />
-    </View>
+    <GluestackUIProvider config={gluestackConfig} mode={isDark ? "dark" : "light"}>
+      <View className={`flex-1 ${isDark ? "dark" : ""}`}>
+        <Stack screenOptions={{ headerShown: false }} />
+      </View>
+    </GluestackUIProvider>
   );
 }
 
@@ -55,11 +54,8 @@ export default function RootLayout() {
     Outfit_700Bold,
   });
 
-  // Fonts not ready yet — keep splash up, render nothing
   if (!fontsLoaded) return null;
 
-  // Fonts ready — mount providers. AuthGate will hide the splash
-  // once the token check also completes.
   return (
     <ThemeProvider>
       <AuthProvider>

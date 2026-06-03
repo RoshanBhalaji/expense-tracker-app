@@ -1,5 +1,10 @@
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  Button as GSButton,
+  ButtonText,
+  ButtonSpinner,
+} from "@gluestack-ui/themed";
 import { useTheme } from "../../context/ThemeContext";
+import { typography } from "../../design/tokens";
 
 interface ButtonProps {
   label: string;
@@ -10,53 +15,72 @@ interface ButtonProps {
   fullWidth?: boolean;
 }
 
+const VARIANT_MAP = {
+  primary: { action: "primary" as const,  variant: "solid" as const  },
+  outline: { action: "primary" as const,  variant: "outline" as const },
+  danger:  { action: "negative" as const, variant: "outline" as const },
+  ghost:   { action: "secondary" as const,variant: "ghost" as const   },
+};
+
 export function Button({
   label,
   onPress,
-  loading = false,
-  variant = "primary",
+  loading  = false,
+  variant  = "primary",
   disabled = false,
   fullWidth = true,
 }: ButtonProps) {
   const { colors, shadow } = useTheme();
+  const { action, variant: gsVariant } = VARIANT_MAP[variant];
 
-  const variantMap = {
-    primary: { textColor: colors.textInverse, bg: colors.accent,        border: undefined,      shadow: shadow.accent },
-    outline: { textColor: colors.accent,       bg: "transparent",        border: colors.accent,  shadow: {}            },
-    danger:  { textColor: colors.error,        bg: "transparent",        border: colors.error,   shadow: {}            },
-    ghost:   { textColor: colors.textSecondary,bg: colors.bgCard,        border: undefined,      shadow: {}            },
-  };
+  const bgColor =
+    variant === "primary" ? colors.accent :
+    variant === "ghost"   ? colors.bgCard : "transparent";
 
-  const v = variantMap[variant];
+  const textColor =
+    variant === "primary" ? colors.textInverse :
+    variant === "outline" ? colors.accent       :
+    variant === "danger"  ? colors.error        : colors.textSecondary;
+
+  const borderColor =
+    variant === "outline" ? colors.accent :
+    variant === "danger"  ? colors.error  : undefined;
 
   return (
-    <TouchableOpacity
+    <GSButton
+      action={action}
+      variant={gsVariant}
       onPress={onPress}
-      disabled={disabled || loading}
-      activeOpacity={0.8}
+      isDisabled={disabled || loading}
       style={[
-        styles.base,
-        v.shadow,
+        variant === "primary" ? shadow.accent : {},
         {
-          backgroundColor: v.bg as string,
-          borderColor:     v.border,
-          borderWidth:     v.border ? 1.5 : 0,
+          backgroundColor: bgColor,
+          borderColor,
+          borderWidth:     borderColor ? 1.5 : 0,
+          borderRadius:    12,
+          paddingVertical: 16,
           width:           fullWidth ? "100%" : undefined,
           paddingHorizontal: fullWidth ? undefined : 24,
           opacity:         disabled || loading ? 0.5 : 1,
+          justifyContent:  "center",
+          alignItems:      "center",
         },
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={v.textColor} />
+        <ButtonSpinner color={textColor} />
       ) : (
-        <Text style={[styles.label, { color: v.textColor }]}>{label}</Text>
+        <ButtonText
+          style={{
+            color:      textColor,
+            fontSize:   16,
+            fontFamily: typography.medium,
+          }}
+        >
+          {label}
+        </ButtonText>
       )}
-    </TouchableOpacity>
+    </GSButton>
   );
 }
-
-const styles = StyleSheet.create({
-  base:  { borderRadius: 12, paddingVertical: 16, alignItems: "center", justifyContent: "center" },
-  label: { fontSize: 16, fontFamily: "Outfit_500Medium", fontWeight: "500" },
-});

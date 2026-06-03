@@ -1,4 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  Avatar as GSAvatar,
+  AvatarFallbackText,
+} from "@gluestack-ui/themed";
 import { useTheme } from "../../context/ThemeContext";
 import { typography } from "../../design/tokens";
 
@@ -10,28 +13,29 @@ interface AvatarProps {
 export function Avatar({ name, size = 48 }: AvatarProps) {
   const { colors } = useTheme();
 
-  const initials =
-    name?.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2) ?? "?";
-
   return (
-    <View style={[
-      styles.circle,
-      {
+    <GSAvatar
+      size="md"
+      style={{
         width:           size,
         height:          size,
         borderRadius:    size / 2,
         backgroundColor: colors.accentDim,
+        borderWidth:     2,
         borderColor:     colors.accent,
-      },
-    ]}>
-      <Text style={[styles.initials, { color: colors.accent, fontSize: size * 0.35 }]}>
-        {initials}
-      </Text>
-    </View>
+        alignItems:      "center",
+        justifyContent:  "center",
+      }}
+    >
+      <AvatarFallbackText
+        style={{
+          color:      colors.accent,
+          fontSize:   size * 0.35,
+          fontFamily: typography.heading,
+        }}
+      >
+        {name ?? "?"}
+      </AvatarFallbackText>
+    </GSAvatar>
   );
 }
-
-const styles = StyleSheet.create({
-  circle:   { borderWidth: 2, alignItems: "center", justifyContent: "center" },
-  initials: { fontFamily: typography.heading },
-});

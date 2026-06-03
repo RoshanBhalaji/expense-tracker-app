@@ -8,6 +8,7 @@
     "@expo-google-fonts/syne": "^0.4.2",
     "@expo/ui": "~56.0.15",
     "@expo/vector-icons": "^15.0.2",
+    "@gluestack-ui/config": "^1.1.20",
     "axios": "^1.16.1",
     "expo": "~56.0.8",
     "expo-blur": "~56.0.3",

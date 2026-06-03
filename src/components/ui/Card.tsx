@@ -1,4 +1,5 @@
-import { StyleSheet, View, ViewProps } from "react-native";
+import { Box } from "@gluestack-ui/themed";
+import type { ViewProps } from "react-native";
 import { useTheme } from "../../context/ThemeContext";
 
 interface CardProps extends ViewProps {
@@ -9,23 +10,21 @@ export function Card({ children, glow = false, style, ...props }: CardProps) {
   const { colors, shadow } = useTheme();
 
   return (
-    <View
+    <Box
       style={[
-        styles.card,
         {
           backgroundColor: colors.bgCard,
+          borderRadius:    16,
+          padding:         20,
+          borderWidth:     1,
           borderColor:     glow ? colors.accentGlow : colors.border,
         },
         glow ? shadow.accent : shadow.card,
         style,
       ]}
-      {...props}
+      {...(props as any)}
     >
       {children}
-    </View>
+    </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  card: { borderRadius: 16, padding: 20, borderWidth: 1 },
-});

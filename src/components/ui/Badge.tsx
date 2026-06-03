@@ -1,4 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  Badge as GSBadge,
+  BadgeText,
+} from "@gluestack-ui/themed";
+import { View, StyleSheet } from "react-native";
 import { useTheme } from "../../context/ThemeContext";
 import { typography } from "../../design/tokens";
 
@@ -21,15 +25,33 @@ export function Badge({ label, variant = "accent" }: BadgeProps) {
   const v = variantMap[variant];
 
   return (
-    <View style={[styles.pill, { backgroundColor: v.bg }]}>
+    <GSBadge
+      action="info"
+      variant="solid"
+      size="sm"
+      style={[styles.pill, { backgroundColor: v.bg }]}
+    >
+      {/* Dot indicator */}
       <View style={[styles.dot, { backgroundColor: v.dot }]} />
-      <Text style={[styles.label, { color: v.text }]}>{label}</Text>
-    </View>
+      <BadgeText
+        style={[styles.text, { color: v.text }]}
+      >
+        {label}
+      </BadgeText>
+    </GSBadge>
   );
 }
 
 const styles = StyleSheet.create({
-  pill:  { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 12, paddingVertical: 4, borderRadius: 9999 },
-  dot:   { width: 6, height: 6, borderRadius: 3 },
-  label: { fontSize: typography.xs, fontFamily: typography.medium },
+  pill: {
+    flexDirection:     "row",
+    alignItems:        "center",
+    paddingHorizontal: 10,
+    paddingVertical:   4,
+    borderRadius:      9999,
+    gap:               6,
+    borderWidth:       0,
+  },
+  dot:  { width: 6, height: 6, borderRadius: 3 },
+  text: { fontSize: typography.xs, fontFamily: typography.medium },
 });
